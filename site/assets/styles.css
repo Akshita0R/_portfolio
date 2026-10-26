@@ -116,6 +116,37 @@ button { font: inherit; color: inherit; }
 .btn--ghost { background: var(--well); color: var(--ink); }
 .sq { width: 30px; height: 30px; padding: 0; border-radius: 6px; }
 
+/* traffic lights: red close, yellow minimise, green full screen */
+.tls { display: flex; gap: 8px; }
+.tl { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; position: relative; box-shadow: inset 0 0 0 .5px rgba(0, 0, 0, .15); }
+.tl--close { background: #ff5f57; }
+.tl--min { background: #febc2e; }
+.tl--max { background: #28c840; }
+.tl::after { position: absolute; inset: 0; display: grid; place-items: center; font: 700 9px/1 var(--sans); color: rgba(0, 0, 0, .55); opacity: 0; transition: opacity .12s; }
+.tl--close::after { content: "×"; font-size: 11px; }
+.tl--min::after { content: "−"; font-size: 11px; }
+.tl--max::after { content: "⤢"; font-size: 8px; }
+.tls:hover .tl::after, .tl:focus-visible::after { opacity: 1; }
+.win__bar { user-select: none; }
+.page { transition: top .3s, right .3s, bottom .3s, left .3s; }
+.page.is-max { top: 0; right: 0; bottom: 0; left: 0; z-index: 35; border-radius: 0; }
+.win.is-minimising, .profile.is-minimising { animation: genie .32s cubic-bezier(.5, 0, .9, .5) forwards; transform-origin: 50% 100%; pointer-events: none; }
+@keyframes genie { to { transform: translateY(45vh) scale(.08, .05); opacity: 0; } }
+.win--preview.is-max { width: calc(100vw - 16px); max-height: none; height: calc(100svh - 16px); }
+.win--preview.is-max .pv { flex: 1; }
+.win--preview.is-max .pv__stage { min-height: 0; }
+.profile.is-max { left: 8px !important; top: 8px !important; width: calc(100% - 16px); }
+
+/* dock for minimised windows */
+.dock { position: fixed; left: 50%; bottom: 14px; translate: -50% 0; z-index: 50; display: flex; gap: 6px; padding: 6px; border-radius: 16px;
+  background: color-mix(in srgb, var(--card) 72%, transparent); backdrop-filter: blur(14px) saturate(1.4); box-shadow: var(--shadow), inset 0 0 0 1px var(--line);
+  animation: dockIn .3s cubic-bezier(.2, .9, .2, 1.2); max-width: calc(100vw - 24px); overflow-x: auto; }
+@keyframes dockIn { from { transform: translateY(20px); opacity: 0; } }
+.dock button { display: flex; align-items: center; gap: 8px; border: 0; background: var(--card); border-radius: 10px; padding: 7px 12px 7px 8px; font-size: 12.5px; cursor: pointer; white-space: nowrap; box-shadow: inset 0 0 0 1px var(--line); transition: transform .15s; }
+.dock button:hover { transform: translateY(-3px) scale(1.04); }
+.dock__ico { width: 22px; height: 22px; border-radius: 6px; background: var(--blue); color: #fff; display: grid; place-items: center; }
+.dock__ico svg { width: 11px; height: 11px; }
+
 /* preview window */
 .scrim { position: fixed; inset: 0; z-index: 40; background: color-mix(in srgb, var(--bg) 55%, transparent); backdrop-filter: blur(2px); }
 .win--preview { position: fixed; z-index: 41; left: 50%; top: 50%; translate: -50% -50%; width: min(940px, calc(100vw - 32px)); max-height: calc(100svh - 40px); animation: pop .3s cubic-bezier(.2, .8, .2, 1); }
@@ -288,6 +319,8 @@ button { font: inherit; color: inherit; }
   .side { position: static; width: auto; margin: 12px; }
   .page { position: static; margin: 0 12px 12px; animation: none; }
   .page .win__body { overflow: visible; }
+  .page.is-max { position: fixed; inset: 0; margin: 0; }
+  .page.is-max .win__body { overflow: auto; }
   .graph { position: relative; inset: auto; height: min(150vw, 640px); }
   .graph__hint { position: static; text-align: center; padding: 0 0 16px; }
 }

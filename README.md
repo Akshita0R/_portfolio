@@ -6,8 +6,9 @@ A light, minimal portfolio built around a **draggable mind-map**: Akshita in the
 
 ## Pages
 - `#/`: mind-map home (drag the centre, hover to connect, click to open; click the centre for a profile card)
-- `#/work`: all projects and roles with previews
-- `#/work/<id>`: full case study
+- `#/projects` and `#/projects/<id>`: projects and their case studies
+- `#/work` and `#/work/<id>`: roles (CSG, Volopay) and what I did there
+- Every window has working macOS buttons: red closes, yellow minimises to the dock, green toggles full screen (or double-click the title bar)
 - `#/about`: intro, experience, values, toolkit, awards (+ Read / Listen / Testimonials once filled in)
 - `#/contact`: contact details, live local time and a message form (Netlify Forms)
 
