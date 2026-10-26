@@ -1,5 +1,7 @@
 # Akshita R — Portfolio (v2)
 
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Akshita0R/_portfolio)
+
 A light, minimal portfolio built around a **draggable mind-map**: Akshita in the centre, projects, roles and pages around her. Drag the centre and everything follows on springs; click a project for a quick preview, or open the full case study.
 
 ## Pages
@@ -21,4 +23,10 @@ npm run dev   # http://localhost:5174
 ```
 
 ## Deploy (Netlify)
-Import this repo in Netlify. `netlify.toml` publishes `site/` and sets up the functions. Add a `STATS_TOKEN` environment variable to use the private visitor stats at `/stats.html`.
+Click **Deploy to Netlify** above, or in Netlify choose *Add new project → Import an existing project → GitHub → _portfolio*.
+No build command is needed: `netlify.toml` publishes `site/` and bundles the tracking functions in `netlify/functions/`.
+
+After the first deploy:
+1. *Project configuration → General → Change project name* (e.g. `akshita-pm`).
+2. *Environment variables → Add* `STATS_TOKEN` (any secret), then redeploy, to open `/stats.html`.
+3. *Forms*: the contact form is detected automatically; turn on email notifications there.
