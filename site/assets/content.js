@@ -23,7 +23,7 @@ window.PORTFOLIO = {
   bio: "A product-minded data analyst who cares about what people use, understand, and trust. Currently making product metrics honest at",
   bioOrg: { label: "CSG", url: "https://www.csgi.com" },
   profileRole: "Data Analyst → Associate Product Manager",
-  profileLine: "Defines the metric before building. Built MedNear 0→1 and knows when not to ship the AI part.",
+  profileLine: "Defines the metric before building. Built MedNear 0→1 and knows when not to ship the AI part. State-level hockey player.",
   country: "India",
   timezone: "Asia/Kolkata",
   aboutIntro: {
@@ -38,6 +38,10 @@ window.PORTFOLIO = {
     { text: ["WRITE THE", "METRIC", "FIRST."], style: "black" },
     { text: ["SHIP", "WHAT'S", "TRUE"], style: "blue" },
     { text: ["ASK USERS.", "THEN", "THE DATA."], style: "ring" },
+  ],
+  // "Beyond work" on the About page (and the Hockey node on the map).
+  beyond: [
+    { title: "State-level hockey player", text: "Years of competitive hockey taught me to read the game fast, hold my position under pressure and trust the team around me. Turns out that's most of product work too." },
   ],
   // Personal sections stay hidden until filled in.
   read: [],        // e.g. { title: "Inspired", author: "Marty Cagan" }
@@ -85,7 +89,7 @@ window.PORTFOLIO = {
     ] },
   ],
   education: [{ org: "CMR Institute of Technology", role: "B.E. Computer Science · CGPA 8.78/10", when: "2021 – 2025" }],
-  awards: ["Merit Scholarship", "Best Mini-Project (Sem 1–5)", "President, Rise Club", "5th, WIE Competition", "₹50K grant · Srishti 2024 & Smart Argothon 2023 finalist · patent filed"],
+  awards: ["State-level hockey player", "Merit Scholarship", "Best Mini-Project (Sem 1–5)", "President, Rise Club", "5th, WIE Competition", "₹50K grant · Srishti 2024 & Smart Argothon 2023 finalist · patent filed"],
 
   // Projects: `scene` picks the illustration: "pharmacy" | "dashboard" | "funnel" | "parking" | "server"
   projects: [

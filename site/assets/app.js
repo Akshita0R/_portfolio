@@ -44,18 +44,19 @@
   let W = 1000, H = 640, CX = 500, CY = 320;
   const NODES = [
     ["MedNear", "hex", "p:mednear", -90, 1],
-    ["Funnel Analytics", "hex", "p:ecommerce-funnel", -62, 0.84],
-    ["Projects", "hex", "#/projects", -35, 1.02],
-    ["Work", "circle", "#/work", -7, 0.86],
-    ["CSG Systems", "square", "p:kpi-dashboards", 21, 1],
-    ["Contact", "square", "#/contact", 48, 0.84],
-    ["Resume", "diamond", "pdf", 76, 1],
-    ["Volopay", "square", "p:fintech-backend", 104, 0.86],
-    ["Experience", "triangle", "#/about/experience", 132, 1.02],
-    ["Toolkit", "square", "#/about/toolkit", 159, 0.84],
-    ["About", "triangle", "#/about", 187, 1],
-    ["Urban Parking", "hex", "p:urban-parking", 215, 0.86],
-    ["Values", "circle", "#/about/values", 242, 1],
+    ["Funnel Analytics", "hex", "p:ecommerce-funnel", -64, 0.84],
+    ["Projects", "hex", "#/projects", -39, 1.02],
+    ["Work", "circle", "#/work", -13, 0.86],
+    ["CSG Systems", "square", "p:kpi-dashboards", 13, 1],
+    ["Contact", "square", "#/contact", 39, 0.84],
+    ["Resume", "diamond", "pdf", 64, 1],
+    ["Volopay", "square", "p:fintech-backend", 90, 0.86],
+    ["Experience", "triangle", "#/about/experience", 116, 1.02],
+    ["Toolkit", "square", "#/about/toolkit", 141, 0.84],
+    ["About", "triangle", "#/about", 167, 1],
+    ["Hockey", "circle", "#/about/beyond", 193, 0.86],
+    ["Urban Parking", "hex", "p:urban-parking", 219, 1.02],
+    ["Values", "circle", "#/about/values", 244, 0.84],
   ].map(([label, shape, go, deg, k], i) => {
     const a = (deg * Math.PI) / 180;
     return { label, shape, go, i, bx: Math.cos(a) * 370 * k, by: Math.sin(a) * 240 * k };
@@ -66,7 +67,7 @@
   function renderGraph() {
     cancelAnimationFrame(raf);
     // Phones get a tall, narrow map so labels stay readable.
-    const narrow = matchMedia("(max-width: 860px)").matches;
+    const narrow = matchMedia("(max-width: 860px) and (orientation: portrait)").matches;
     [W, H, CX, CY] = narrow ? [420, 640, 210, 310] : [1000, 640, 500, 320];
     const hub = { x: CX, y: CY };
     NODES.forEach((n, i) => {
@@ -98,7 +99,7 @@
           </g>
         </svg>
         <div class="profile card" data-profile hidden></div>
-        <p class="graph__hint">Drag the centre · hover to connect · click to open</p>
+        <p class="graph__hint"><span class="mouse">Drag the centre · hover to connect · click to open</span><span class="touch">Drag the centre · tap a node to open</span></p>
       </div>`;
     const g = $("[data-graph]"), svg = $("svg", g), hubEl = $("[data-hub]", g), profile = $("[data-profile]", g);
     const nodeEls = NODES.map((n) => $(`[data-node="${n.i}"]`, g)), edges = NODES.map((n) => $(`[data-edge="${n.i}"]`, g));
@@ -306,6 +307,11 @@
     track("project", p.id + "-case");
   }
 
+  // Two crossed hockey sticks and a ball, line-drawn.
+  const HOCKEY = `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M 28 14 L 74 86 q 6 10 18 8 l 10 -2" /><path d="M 92 14 L 46 86 q -6 10 -18 8 l -10 -2" />
+    <path d="M 30 22 l 6 -4 M 90 22 l -6 -4" stroke-width="5" />
+    <circle cx="60" cy="104" r="7" fill="var(--blue)" stroke="var(--blue)" /></svg>`;
   const BOOK_COLORS = ["#1a7cff", "#111", "#c0352b", "#2f6b3f", "#a8691a", "#6b2e5f"];
   function renderAbout(section) {
     const A = P.aboutIntro;
@@ -322,6 +328,9 @@
       <div class="posters">${P.values.map((v) => v.style === "ring"
         ? `<div class="poster poster--ring"><span>${v.text.map(esc).join("<br>")}</span></div>`
         : `<div class="poster poster--${v.style}"><span>${v.text.map(esc).join("<br>")}</span></div>`).join("")}</div>
+
+      ${(P.beyond || []).length ? `<span class="pill" id="beyond">Beyond work</span>
+      ${P.beyond.map((x) => `<div class="beyond"><div class="beyond__art">${HOCKEY}</div><div><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p></div></div>`).join("")}` : ""}
 
       <span class="pill" id="toolkit">Toolkit</span>
       <dl class="toolkit">${P.skills.map((s) => `<div><dt>${esc(s.group)}</dt><dd>${esc(s.items)}</dd></div>`).join("")}</dl>
