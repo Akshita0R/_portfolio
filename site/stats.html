@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Visitor Stats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .stats-page { max-width: 1000px; margin: 0 auto; padding: 40px 16px 80px; }
+    .stats-page h1 { font-size: 28px; margin: 6px 0 22px; }
+    .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 26px; }
+    .bar input, .bar select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--card); color: var(--ink); }
+    .bar label { display: grid; gap: 4px; font-size: 12px; color: var(--soft); }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 22px; }
+    .tile, .book2 { background: var(--card); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; }
+    .tile span { font-size: 12px; color: var(--soft); }
+    .tile b { display: block; font-size: 28px; letter-spacing: -.02em; }
+    .books2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+    .book2 h2 { font-size: 15px; margin-bottom: 8px; }
+    .book2 table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .book2 td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+    .book2 td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .msg { font-size: 12.5px; color: #c0352b; }
+  </style>
+</head>
+<body>
+  <main class="stats-page">
+    <p class="eyebrow"><a href="./">← Back to the portfolio</a></p>
+    <h1>Visitor stats</h1>
+    <form class="bar" data-form>
+      <label>Access token<input type="password" name="token" required autocomplete="current-password" /></label>
+      <label>Period<select name="days"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select></label>
+      <button class="btn" type="submit">Load</button>
+      <span class="msg" data-msg role="status"></span>
+    </form>
+    <section class="tiles" data-tiles></section>
+    <section class="books2" data-books></section>
+  </main>
+  <script>
+    (() => {
+      const form = document.querySelector("[data-form]"), msg = document.querySelector("[data-msg]");
+      const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+      try { form.token.value = localStorage.getItem("stats-token") || ""; } catch {}
+      const book = (t, rows) => `<div class="book2"><h2>${t}</h2><table>${rows.length ? rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${v}</td></tr>`).join("") : "<tr><td>Nothing yet</td></tr>"}</table></div>`;
+      async function load() {
+        msg.textContent = "Loading…";
+        try {
+          const res = await fetch(`/api/stats?days=${form.days.value}`, { headers: { authorization: `Bearer ${form.token.value}` } });
+          const d = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+          if (!res.ok) throw new Error(d.error || res.status);
+          try { localStorage.setItem("stats-token", form.token.value); } catch {}
+          msg.textContent = "";
+          const t = d.totals;
+          document.querySelector("[data-tiles]").innerHTML = [["Page views", t.pageview], ["Visitor-days", t.visitors], ["Project views", t.project], ["Résumé opens", t.resume], ["Messages", t.postcard]]
+            .map(([k, v]) => `<div class="tile"><span>${k}</span><b>${v || 0}</b></div>`).join("");
+          const days = Object.entries(d.daily).reverse().filter(([, x]) => x.views).map(([k, x]) => [k, `${x.views} views · ${x.visitors} visitors`]);
+          document.querySelector("[data-books]").innerHTML = [book("Sources", d.sources), book("Projects viewed", d.projects), book("Pages & clicks", d.sections), book("Links followed", d.links), book("Countries", d.countries), book("Devices", d.devices), book("Day by day", days)].join("");
+        } catch (e) { msg.textContent = `Couldn't load: ${e.message}`; }
+      }
+      form.addEventListener("submit", (e) => (e.preventDefault(), load()));
+      if (form.token.value) load();
+    })();
+  </script>
+</body>
+</html>

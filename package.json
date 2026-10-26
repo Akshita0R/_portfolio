@@ -1,0 +1,13 @@
+{
+  "name": "akshita-portfolio-v2",
+  "private": true,
+  "type": "module",
+  "description": "Akshita R's portfolio: a draggable mind-map of projects, roles and case studies",
+  "scripts": {
+    "dev": "npx --yes serve site -l 5174",
+    "check": "node --check site/assets/app.js && node --check site/assets/mocks.js && node --check site/assets/content.js && node --check netlify/functions/track.mjs && node --check netlify/functions/stats.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

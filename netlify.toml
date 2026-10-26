@@ -1,0 +1,14 @@
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/stats.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"
